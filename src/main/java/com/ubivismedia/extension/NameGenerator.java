@@ -1,11 +1,12 @@
 package com.ubivismedia.extensions;
 
+import com.ubivis.ugs.api.ExtensionInterface;
 import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
-public class DynamicNameGenerator {
+public class DynamicNameGenerator implements ExtensionInterface {
     private final File namePatternFolder;
     private final Map<String, Map<String, YamlConfiguration>> namePatterns = new HashMap<>();
     private final Random random = new Random();
@@ -21,7 +22,10 @@ public class DynamicNameGenerator {
     private void loadPatterns() {
         namePatterns.clear(); // Leert die Map und lädt neu
 
-        for (File categoryFolder : Objects.requireNonNull(namePatternFolder.listFiles(File::isDirectory))) {
+        File[] categoryFolders = namePatternFolder.listFiles(File::isDirectory);
+        if (categoryFolders == null) return; // Falls keine Ordner existieren
+
+        for (File categoryFolder : categoryFolders) {
             String category = categoryFolder.getName();
             Map<String, YamlConfiguration> genderFiles = new HashMap<>();
 
@@ -42,7 +46,15 @@ public class DynamicNameGenerator {
         System.out.println("[UGS-NameGenerator] " + namePatterns.size() + " Kategorien erfolgreich geladen!");
     }
 
-    public String generateName(String category, String gender) {
+    @Override
+    public String execute(String[] params) {
+        if (params.length < 2) {
+            return "Error: Bitte Kategorie und Geschlecht angeben.";
+        }
+
+        String category = params[0];
+        String gender = params[1];
+
         if (!namePatterns.containsKey(category) || !namePatterns.get(category).containsKey(gender)) {
             return "Unknown";
         }
