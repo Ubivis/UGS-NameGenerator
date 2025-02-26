@@ -141,16 +141,13 @@ public class NameGenerator implements ExtensionInterface {
     }
 
     private void saveResource(String resourcePath, File destFile) {
-        System.out.println("[UGS-NameGenerator] Versuche Ressource aus JAR zu extrahieren: " + resourcePath);
-
-        // Pfad zur aktuellen Extension-JAR ermitteln
         File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
 
         try (JarFile jar = new JarFile(jarFile)) {
             JarEntry entry = jar.getJarEntry(resourcePath);
 
             if (entry == null) {
-                System.out.println("[UGS-NameGenerator] ❌ FEHLER: Ressource nicht gefunden in der JAR -> " + resourcePath);
+                System.out.println("[UGS-NameGenerator] ❌ ERROR: Ressource not found in JAR -> " + resourcePath);
                 return;
             }
 
@@ -167,10 +164,8 @@ public class NameGenerator implements ExtensionInterface {
                 }
             }
 
-            System.out.println("[UGS-NameGenerator] ✅ Datei extrahiert: " + resourcePath);
-
         } catch (Exception e) {
-            System.out.println("[UGS-NameGenerator] ❌ Fehler beim Extrahieren von " + resourcePath + ": " + e.getMessage());
+            System.out.println("[UGS-NameGenerator] ❌ Error with extraction of " + resourcePath + ": " + e.getMessage());
         }
     }
 
