@@ -1,4 +1,4 @@
-package com.ugs.extensions;
+package com.ubivismedia.extensions;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
