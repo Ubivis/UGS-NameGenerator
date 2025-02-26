@@ -20,10 +20,10 @@ public class DynamicNameGenerator implements ExtensionInterface {
     }
 
     private void loadPatterns() {
-        namePatterns.clear(); // Leert die Map und lädt neu
+        namePatterns.clear();
 
         File[] categoryFolders = namePatternFolder.listFiles(File::isDirectory);
-        if (categoryFolders == null) return; // Falls keine Ordner existieren
+        if (categoryFolders == null) return;
 
         for (File categoryFolder : categoryFolders) {
             String category = categoryFolder.getName();
@@ -47,9 +47,19 @@ public class DynamicNameGenerator implements ExtensionInterface {
     }
 
     @Override
+    public String getName() {
+        return "NameGenerator";
+    }
+    
+    @Override
+    public String getDescription() {
+        return "Returns a randomly generated Name";
+    }
+    
+    @Override
     public String execute(String[] params) {
         if (params.length < 2) {
-            return "Error: Bitte Kategorie und Geschlecht angeben.";
+            return "Error: State category and gender.";
         }
 
         String category = params[0];
